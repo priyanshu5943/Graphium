@@ -142,7 +142,14 @@ from plotly.subplots import make_subplots
 from scipy.stats import skew, kurtosis
 from IPython.display import display, HTML
 
-def analyze_numeric_univariate(df):
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from scipy.stats import skew
+from IPython.display import display, HTML
+
+def analyze_numeric_univariate(df): 
     id_like_keywords = {'id', 'index', 'serial'}
     exclude_cols = {col for col in df.columns if col.lower() in id_like_keywords}
     numeric_cols = [col for col in df.select_dtypes(include='number').columns if col not in exclude_cols]
@@ -213,17 +220,6 @@ def analyze_numeric_univariate(df):
         median_val = clean_series.median()
         std_val = clean_series.std()
         skew_val = skew(clean_series)
-        kurt_val = kurtosis(clean_series)
-        mode_val = clean_series.mode().iloc[0] if not clean_series.mode().empty else "N/A"
-
-        q1 = clean_series.quantile(0.25)
-        q3 = clean_series.quantile(0.75)
-        iqr = q3 - q1
-        lower_bound = q1 - 1.5 * iqr
-        upper_bound = q3 + 1.5 * iqr
-        outlier_count = clean_series[(clean_series < lower_bound) | (clean_series > upper_bound)].count()
-
-        cv = std_val / mean_val if mean_val != 0 else float("nan")
 
         feature_print_count[feature] = feature_print_count.get(feature, 0) + 1
         font_size = 24 + 4 * feature_print_count[feature]
@@ -239,21 +235,11 @@ def analyze_numeric_univariate(df):
             ("Standard Deviation", f"{std_val:.2f}"),
             ("Min", f"{min_val:.2f}"),
             ("Max", f"{max_val:.2f}"),
-            ("Skewness", f"{skew_val:.2f}"),
-            ("Kurtosis", f"{kurt_val:.2f}"),
-            ("Mode", f"{mode_val}"),
-            ("Q1 (25%)", f"{q1:.2f}"),
-            ("Q3 (75%)", f"{q3:.2f}"),
-            ("IQR", f"{iqr:.2f}"),
-            ("Lower Bound (1.5*IQR)", f"{lower_bound:.2f}"),
-            ("Upper Bound (1.5*IQR)", f"{upper_bound:.2f}"),
-            ("Outlier Count (1.5*IQR)", f"{outlier_count}"),
-            ("Coefficient of Variation", f"{cv:.2f}"),
+            ("Skewness", f"{skew_val:.2f}")
         ]
 
-        half = len(summary_data) // 2
-        col1 = summary_data[:half]
-        col2 = summary_data[half:]
+        col1 = summary_data[:4]
+        col2 = summary_data[4:]
 
         col1_html = "".join([f"<li><b>{k}:</b> {v}</li>" for k, v in col1])
         col2_html = "".join([f"<li><b>{k}:</b> {v}</li>" for k, v in col2])
