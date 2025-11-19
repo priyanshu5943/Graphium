@@ -54,6 +54,9 @@ gh.ip_cat_vs_target(df, target_col='loan_paid_back')
 
 ### Numeric × Categorical × Target grid (static multivariate analysis)
 
+
+
+```python
 gh.mv_num_cat_vs_target_grid(
     df=df,
     num_cols=['credit_score', 'loan_amount'],      # numeric columns
@@ -62,3 +65,7 @@ gh.mv_num_cat_vs_target_grid(
     plot_type='box',                               # 'violin', 'box', or 'swarm'
     n_cols=2                                       # plots per row
 )
+
+```
+
+
