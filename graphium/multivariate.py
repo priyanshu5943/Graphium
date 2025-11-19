@@ -151,7 +151,7 @@ import pandas as pd
 def mv_corr_heatmap(df, title="Correlation Heatmap (Numeric Features)"):
     """
     Interactive correlation heatmap for numeric features using Plotly.
-    Clean, minimal, white background version.
+    Clean, centered, white background version.
     """
 
     numeric_df = df.select_dtypes(include=["number"])
@@ -168,20 +168,30 @@ def mv_corr_heatmap(df, title="Correlation Heatmap (Numeric Features)"):
             text=corr.values,
             texttemplate="%{text}",
             colorscale="Tealrose",
-            zmin=-1, zmax=1,
+            zmin=-1, 
+            zmax=1,
             colorbar=dict(title="Corr")
         )
     )
 
     fig.update_layout(
-        title=title,
-        height=350,   # smaller
-        width=800,    # smaller
+        title=dict(text=title, x=0.5),   # title centered
+        height=400,
+        width=700,
         paper_bgcolor="white",
         plot_bgcolor="white",
         font=dict(color="black"),
-        xaxis_showgrid=False,
-        yaxis_showgrid=False
+
+        # CENTER THE HEATMAP
+        margin=dict(l=80, r=80, t=60, b=40),
+        xaxis=dict(
+            showgrid=False,
+            domain=[0.15, 0.85]    # center horizontally
+        ),
+        yaxis=dict(
+            showgrid=False,
+            domain=[0.10, 0.90]    # center vertically
+        )
     )
 
     fig.show()
