@@ -175,8 +175,8 @@ def mv_corr_heatmap(df, title="Correlation Heatmap (Numeric Features)"):
 
     fig.update_layout(
         title=title,
-        height=550,   # smaller
-        width=750,    # smaller
+        height=350,   # smaller
+        width=800,    # smaller
         paper_bgcolor="white",
         plot_bgcolor="white",
         font=dict(color="black"),
