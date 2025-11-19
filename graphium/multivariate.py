@@ -135,3 +135,61 @@ def mv_num_cat_vs_target_grid(
     plt.tight_layout(rect=[0, 0, 1, 0.95])
     plt.subplots_adjust(wspace=0.55, hspace=0.8)
     plt.show()
+
+
+
+
+
+
+
+# -----------------------------------------------------------------------
+# Correlation Heatmap (Interactive, Plotly)
+# -----------------------------------------------------------------------
+
+import plotly.graph_objects as go
+import pandas as pd
+
+def mv_corr_heatmap(df, title="Correlation Heatmap of Numeric Features"):
+    """
+    Interactive correlation heatmap for numeric features using Plotly.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Input dataframe.
+    title : str
+        Title for the heatmap.
+    """
+
+    # Select only numeric columns
+    numeric_df = df.select_dtypes(include=["number"])
+
+    if numeric_df.empty:
+        raise ValueError("No numeric columns found for correlation heatmap.")
+
+    # Compute correlation matrix
+    correlation_matrix = numeric_df.corr().round(2)
+
+    fig = go.Figure(data=go.Heatmap(
+        z=correlation_matrix.values,
+        x=correlation_matrix.columns,
+        y=correlation_matrix.columns,
+        text=correlation_matrix.values,
+        texttemplate="%{text}",
+        colorscale="Tealrose",
+        zmin=-1, zmax=1,
+        colorbar=dict(title="Correlation")
+    ))
+
+    fig.update_layout(
+        title=title,
+        height=700,
+        width=900,
+        xaxis_showgrid=False,
+        yaxis_showgrid=False,
+        paper_bgcolor="black",
+        plot_bgcolor="black",
+        font=dict(color="white"),
+    )
+
+    fig.show()

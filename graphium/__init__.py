@@ -4,7 +4,7 @@ Graphium: A clean EDA visualization toolkit
 Modules:
 - Static plots (Matplotlib / Seaborn)
 - Interactive plots (Plotly)
-- Multivariate plots (Static grid combinations)
+- Multivariate plots (static + interactive)
 """
 
 # ---------------------------------------------------------
@@ -30,6 +30,7 @@ from .interactive import (
 # ---------------------------------------------------------
 from .multivariate import (
     mv_num_cat_vs_target_grid,
+    mv_corr_heatmap
 )
 
 # ---------------------------------------------------------
@@ -48,4 +49,5 @@ __all__ = [
 
     # Multivariate
     "mv_num_cat_vs_target_grid",
+    "mv_corr_heatmap",
 ]
