@@ -148,48 +148,40 @@ def mv_num_cat_vs_target_grid(
 
 import plotly.graph_objects as go
 import pandas as pd
-
-def mv_corr_heatmap(df, title="Correlation Heatmap of Numeric Features"):
+def mv_corr_heatmap(df, title="Correlation Heatmap (Numeric Features)"):
     """
     Interactive correlation heatmap for numeric features using Plotly.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        Input dataframe.
-    title : str
-        Title for the heatmap.
+    Clean, minimal, white background version.
     """
 
-    # Select only numeric columns
     numeric_df = df.select_dtypes(include=["number"])
-
     if numeric_df.empty:
         raise ValueError("No numeric columns found for correlation heatmap.")
 
-    # Compute correlation matrix
-    correlation_matrix = numeric_df.corr().round(2)
+    corr = numeric_df.corr().round(2)
 
-    fig = go.Figure(data=go.Heatmap(
-        z=correlation_matrix.values,
-        x=correlation_matrix.columns,
-        y=correlation_matrix.columns,
-        text=correlation_matrix.values,
-        texttemplate="%{text}",
-        colorscale="Tealrose",
-        zmin=-1, zmax=1,
-        colorbar=dict(title="Correlation")
-    ))
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=corr.values,
+            x=corr.columns,
+            y=corr.columns,
+            text=corr.values,
+            texttemplate="%{text}",
+            colorscale="Tealrose",
+            zmin=-1, zmax=1,
+            colorbar=dict(title="Corr")
+        )
+    )
 
     fig.update_layout(
         title=title,
-        height=700,
-        width=900,
+        height=550,   # smaller
+        width=750,    # smaller
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        font=dict(color="black"),
         xaxis_showgrid=False,
-        yaxis_showgrid=False,
-        paper_bgcolor="black",
-        plot_bgcolor="black",
-        font=dict(color="white"),
+        yaxis_showgrid=False
     )
 
     fig.show()
