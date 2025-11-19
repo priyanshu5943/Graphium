@@ -51,3 +51,14 @@ gh.ip_num_univariate(df)
 # Categorical feature vs target (interactive)
 gh.ip_cat_vs_target(df, target_col='loan_paid_back')
 ```
+
+### Numeric × Categorical × Target grid (static multivariate analysis)
+
+gh.mv_num_cat_vs_target_grid(
+    df=df,
+    num_cols=['credit_score', 'loan_amount'],      # numeric columns
+    cat_cols=['gender', 'education_level'],        # categorical columns
+    target_col='loan_paid_back',                   # hue target
+    plot_type='box',                               # 'violin', 'box', or 'swarm'
+    n_cols=2                                       # plots per row
+)
