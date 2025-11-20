@@ -123,7 +123,8 @@ def ip_cat_univariate(df):
         display(HTML(table_html))
 
         # Force vertical stacking before plots
-        display(HTML("<div style='clear:both; width:100%; height:30px;'></div>"))
+        # Small spacing before plots
+        display(HTML("<div style='clear:both; width:100%; height:10px;'></div>"))
 
         return value_counts, percentage
 
@@ -177,8 +178,8 @@ def ip_cat_univariate(df):
             paper_bgcolor="black",
             plot_bgcolor="black",
             font=dict(color="white"),
-            height=330,
-            width=680,
+            height=300,
+            width=500,
             margin=dict(t=40, l=20, r=20, b=20),
         )
 
@@ -186,9 +187,11 @@ def ip_cat_univariate(df):
 
         fig.show()
 
-        # FORCE VERTICAL SEPARATION after plots
-        display(HTML("<div style='clear:both; width:100%; height:35px;'></div>"))
-        display(HTML("<hr style='border:0; border-top:1px solid #999; margin:30px 0;'>"))
+        # Minimal vertical spacing (tight layout)
+        display(HTML("<div style='clear:both; width:100%; height:15px;'></div>"))
+        display(HTML("<hr style='border:0; border-top:1px solid #aaa; margin:15px 0;'>"))
+
+
 
     # ----------------------------------------
     # MAIN LOOP
