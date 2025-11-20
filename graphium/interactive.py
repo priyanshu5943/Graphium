@@ -462,11 +462,15 @@ def _plot_categorical_vs_target(df, x_col, target_col):
         yaxis=dict(showgrid=True, zeroline=True, zerolinecolor='white', showline=False),
         legend_title_text=target_col,
         legend_font=dict(color='white', size=12),
-        width=650,
+        width=500,
         height=300,
     )
 
     fig.show()
+
+    # 🔥 Prevent horizontal rendering in saved notebooks
+    display(HTML("<div style='clear:both; width:100%; height:15px;'></div>"))
+    display(HTML("<hr style='border:0; border-top:1px solid #666; margin:15px 0;'>"))
 
 # ============================================================
 # MAIN PUBLIC FUNCTION
@@ -475,8 +479,6 @@ def _plot_categorical_vs_target(df, x_col, target_col):
 def ip_cat_vs_target(df, target_col):
     """
     Interactive categorical feature vs target distribution plots.
-    Uses grouped histograms to visualize how target values distribute
-    across each categorical feature.
     """
 
     # Detect categorical features except target
@@ -489,18 +491,20 @@ def ip_cat_vs_target(df, target_col):
 
     # Header
     display(HTML(
-        f"<h1 style='text-align:center; font-size:32px; color:green; margin-bottom:30px;'>"
+        f"<h1 style='text-align:center; font-size:32px; color:green; margin-bottom:20px;'>"
         f"<b>Categorical Features vs Target Distribution</b></h1>"
     ))
 
     # Loop through categorical columns
     for feature in cat_cols:
-        display(HTML(f"<div style='margin-bottom:30px;'>"))
-        display(HTML(
-            f"<h2 style='text-align:center; font-size:22px; color:#FF69B4; margin-bottom:10px;'>"
-            f"<b>{target_col} by {feature}</b></h2>"
-        ))
 
+        # Title for each feature
+        display(HTML(f"<h2 style='text-align:center; font-size:22px; color:#FF69B4;'>"
+                     f"<b>{target_col} by {feature}</b></h2>"))
+
+        # Plot
         _plot_categorical_vs_target(df, x_col=feature, target_col=target_col)
 
-        display(HTML("</div>"))
+        # 🔥 Minimal gap before next feature
+        display(HTML("<div style='clear:both; width:100%; height:10px;'></div>"))
+
