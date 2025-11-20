@@ -13,19 +13,20 @@ from plotly.subplots import make_subplots
 def ip_cat_univariate(df):
     """
     Fully interactive univariate visualization for categorical features.
-    Generates:
-        - Summary stats (entropy, gini, missing %, imbalance, etc.)
-        - Count bar chart
-        - Percentage donut chart
-        - Auto label rotation
-        - Top & bottom category tables
+    Produces:
+        • Summary statistics
+        • Top & bottom category tables
+        • Count bar chart
+        • Percentage donut chart
+    Layout is fixed to ensure correct vertical stacking in both
+    live notebooks and saved notebooks.
     """
 
     feature_print_count = {}
 
-    # --------------------------
+    # ----------------------------------------
     # Helper: detect categorical
-    # --------------------------
+    # ----------------------------------------
     def is_categorical(col):
         return (
             (df[col].dtype == 'object' and df[col].nunique() <= 15) or
@@ -33,9 +34,9 @@ def ip_cat_univariate(df):
             (np.issubdtype(df[col].dtype, np.number) and df[col].nunique() <= 15)
         )
 
-    # --------------------------------
-    # Helper: compute summary metadata
-    # --------------------------------
+    # ----------------------------------------
+    # Helper: summary block
+    # ----------------------------------------
     def summarize_categorical(series, feature):
         value_counts = series.value_counts(dropna=False)
         percentage = (value_counts / value_counts.sum()) * 100
@@ -50,28 +51,27 @@ def ip_cat_univariate(df):
 
         imbalance_ratio = value_counts.max() / max(value_counts.min(), 1)
 
-        ent_val = entropy(value_counts)  # Shannon entropy
+        ent_val = entropy(value_counts)
         p = value_counts / value_counts.sum()
-        gini_index = 1 - (p ** 2).sum()  # Gini impurity
+        gini_index = 1 - (p ** 2).sum()
 
         mode_ratio = value_counts.max() / total_rows
 
-        # Dynamic heading size
         feature_print_count[feature] = feature_print_count.get(feature, 0) + 1
         font_size = 24 + 4 * feature_print_count[feature]
 
-        # ---------------------
-        # BEAUTIFUL HTML HEADER
-        # ---------------------
-        display(HTML(f"<div style='margin-bottom:50px;'>"))
+        # ----------------------------------------
+        # MAIN HEADER
+        # ----------------------------------------
+        display(HTML("<div style='clear:both; width:100%; height:25px;'></div>"))
         display(HTML(
             f"<h2 style='text-align:center; font-size:{font_size}px; color:green;'>"
             f"<b>{feature}</b></h2>"
         ))
 
-        # -----------------------------
-        # PRINT STATISTICAL INFORMATION
-        # -----------------------------
+        # ----------------------------------------
+        # Summary text
+        # ----------------------------------------
         print(f"{'Total Rows':<30}: {total_rows}")
         print(f"{'Unique Categories':<30}: {num_unique}")
         print(f"{'Missing Values':<30}: {missing_count} ({missing_pct:.2f}%)")
@@ -84,50 +84,55 @@ def ip_cat_univariate(df):
         print(f"{'Gini Index':<30}: {gini_index:.2f}")
         print(f"{'Mode Frequency Ratio':<30}: {mode_ratio:.2f}")
 
-        # -----------------------------
-        # Top & Bottom category tables
-        # -----------------------------
+        # ----------------------------------------
+        # Top & bottom categories
+        # ----------------------------------------
         top_n = 1 if num_unique <= 5 else (3 if num_unique <= 20 else 5)
 
         top_html = (
-            "<ul>"
-            + "".join([
+            "<ul>" +
+            "".join([
                 f"<li>{i+1}. {k} - {v} ({percentage[k]:.2f}%)</li>"
                 for i, (k, v) in enumerate(value_counts.head(top_n).items())
-            ])
-            + "</ul>"
+            ]) +
+            "</ul>"
         )
 
         bottom_html = (
-            "<ul>"
-            + "".join([
+            "<ul>" +
+            "".join([
                 f"<li>{i+1}. {k} - {v} ({percentage[k]:.2f}%)</li>"
                 for i, (k, v) in enumerate(value_counts.tail(top_n).items())
-            ])
-            + "</ul>"
+            ]) +
+            "</ul>"
         )
 
         table_html = f"""
-        <table style='width:100%; font-size:14px; table-layout:fixed; margin-top:10px;'>
-        <tr>
-          <th style='text-align:center; width:50%; color:#00CED1;'>Top Categories</th>
-          <th style='text-align:center; width:50%; color:#FF69B4;'>Bottom Categories</th>
-        </tr>
-        <tr>
-          <td style='vertical-align:top; padding:10px;'>{top_html}</td>
-          <td style='vertical-align:top; padding:10px;'>{bottom_html}</td>
-        </tr>
+        <table style='width:100%; margin-top:15px; table-layout:fixed; font-size:14px;'>
+            <tr>
+                <th style='text-align:center; color:#00CED1;'>Top Categories</th>
+                <th style='text-align:center; color:#FF69B4;'>Bottom Categories</th>
+            </tr>
+            <tr>
+                <td style='vertical-align:top; padding:10px;'>{top_html}</td>
+                <td style='vertical-align:top; padding:10px;'>{bottom_html}</td>
+            </tr>
         </table>
         """
 
         display(HTML(table_html))
 
+        # Force vertical stacking before plots
+        display(HTML("<div style='clear:both; width:100%; height:30px;'></div>"))
+
         return value_counts, percentage
 
-    # -----------------------------------
-    # Helper: create interactive plotly plots
-    # -----------------------------------
+    # ----------------------------------------
+    # Helper: generate interactive plot
+    # ----------------------------------------
     def plot_categorical_distribution(value_counts, percentage, feature):
+
+        rotate_labels = -45 if len(value_counts) > 8 else 0
 
         colors = [
             "#40FF80", "#FF4040", '#FFD700', '#40E0D0', '#FF69B4', '#7FFFD4',
@@ -136,14 +141,10 @@ def ip_cat_univariate(df):
             '#32CD32', '#00CED1', '#1E90FF', '#FFFF00', '#7CFC00'
         ]
 
-        rotate_labels = -45 if len(value_counts) > 8 else 0
-
-        # Subplots
         fig = make_subplots(
-            rows=1,
-            cols=2,
+            rows=1, cols=2,
             subplot_titles=(f"{feature} - Count", f"{feature} - % Share"),
-            specs=[[{"type": "bar"}, {"type": "domain"}]]
+            specs=[[{"type": "bar"}, {"type": "domain"}]],
         )
 
         # Bar chart
@@ -154,7 +155,6 @@ def ip_cat_univariate(df):
                 text=value_counts.values,
                 textposition="outside",
                 marker_color=colors[:len(value_counts)],
-                hovertemplate=f"{feature}: %{{x}}<br>Count: %{{y}}<extra></extra>"
             ),
             row=1, col=1
         )
@@ -166,31 +166,33 @@ def ip_cat_univariate(df):
                 values=percentage,
                 hole=0.45,
                 marker_colors=colors[:len(value_counts)],
-                hovertemplate=f"{feature}: %{{label}}<br>Share: %{{percent}}<extra></extra>"
             ),
             row=1, col=2
         )
 
         fig.update_layout(
             title=f"Distribution of {feature}",
-            title_font=dict(size=20),
+            title_font=dict(size=18),
             showlegend=False,
-            plot_bgcolor="black",
             paper_bgcolor="black",
-            font=dict(color="white", size=11),
-            height=320,
+            plot_bgcolor="black",
+            font=dict(color="white"),
+            height=330,
             width=680,
-            margin=dict(t=50, b=25, l=25, r=25),
-            xaxis_tickangle=rotate_labels
+            margin=dict(t=40, l=20, r=20, b=20),
         )
 
+        fig.update_xaxes(tickangle=rotate_labels)
+
         fig.show()
-        display(HTML("</div>"))
 
-    # ============================================================
-    # MAIN LOOP — PROCESS ALL CATEGORICAL COLUMNS
-    # ============================================================
+        # FORCE VERTICAL SEPARATION after plots
+        display(HTML("<div style='clear:both; width:100%; height:35px;'></div>"))
+        display(HTML("<hr style='border:0; border-top:1px solid #999; margin:30px 0;'>"))
 
+    # ----------------------------------------
+    # MAIN LOOP
+    # ----------------------------------------
     for feature in df.columns:
         if feature.lower() == "id":
             continue
