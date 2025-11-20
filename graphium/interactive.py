@@ -124,7 +124,7 @@ def ip_cat_univariate(df):
 
         # Force vertical stacking before plots
         # Small spacing before plots
-        display(HTML("<div style='clear:both; width:100%; height:10px;'></div>"))
+        display(HTML("<div style='clear:both; width:100%; height:8px;'></div>"))
 
         return value_counts, percentage
 
@@ -188,8 +188,10 @@ def ip_cat_univariate(df):
         fig.show()
 
         # Minimal vertical spacing (tight layout)
-        display(HTML("<div style='clear:both; width:100%; height:15px;'></div>"))
-        display(HTML("<hr style='border:0; border-top:1px solid #aaa; margin:15px 0;'>"))
+# Tight spacing after plots
+        display(HTML("<div style='clear:both; width:100%; height:12px;'></div>"))
+        display(HTML("<hr style='border:0; border-top:1px solid #999; margin:12px 0;'>"))
+
 
 
 
