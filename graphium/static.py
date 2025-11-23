@@ -300,7 +300,7 @@ def sp_feature_target_analysis(df, target_col, color_col=None, plot_type=3):
 
     # ---------------- Categorical vs Numeric ---------------
     if plot_type == 2 and cat_vs_num:
-        display(HTML(f"<h1 style='color:{heading_color}; text-align:center'>Numeric Feature vs {target_col}</h1>"))
+        display(HTML(f"<h1 style='color:{heading_color}; text-align:center'>Categorical Feature vs {target_col}</h1>"))
         _spacer_div(20)
         fig, axes = _create_subplots(len(cat_vs_num))
         for i, feature in enumerate(cat_vs_num):
