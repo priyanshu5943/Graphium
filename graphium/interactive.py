@@ -494,7 +494,7 @@ def ip_cat_vs_target(df, target_col):
     # Header
     display(HTML(
         f"<h1 style='text-align:center; font-size:32px; color:green; margin-bottom:20px;'>"
-        f"<b>Categorical Features vs Target Distribution</b></h1>"
+        f"<b>Categorical Features vs {target_col} Distribution</b></h1>"
     ))
 
     # Loop through categorical columns
