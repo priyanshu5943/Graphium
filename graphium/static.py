@@ -11,7 +11,7 @@ from IPython.display import HTML, display
 # ============================================================
 
 base_colors = [
-    "#40FF80", "#FF4040", '#1E90FF', '#FFFF00', '#BA55D3', '#00FA9A', '#DC143C',
+    "#00BFFF", "#FF1493", '#FFD700', '#32CD32', '#9370DB', '#7FFFD4', '#00FA9A', '#DC143C',
     '#FF8C00', '#00BFFF', '#8A2BE2', '#7B68EE', '#3CB371',
     '#FF1493', '#00FF7F', '#B22222', '#DAA520', '#5F9EA0',
     '#20B2AA', '#F08080', '#ADFF2F', '#CD5C5C', '#8FBC8F',

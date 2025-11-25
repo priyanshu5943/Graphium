@@ -60,7 +60,7 @@ def mv_num_cat_vs_target_grid(
 
     # Base color palette
     base_colors = [
-        "#40FF80", "#FF4040", '#BA55D3', '#00FA9A', '#DC143C',
+        "#00BFFF", "#FF1493", '#FFD700', '#32CD32', '#9370DB', '#7FFFD4', '#DC143C',
         '#FF8C00', '#00BFFF', '#8A2BE2', '#7B68EE', '#3CB371',
         '#FF1493', '#00FF7F', '#B22222', '#DAA520', '#5F9EA0',
         '#20B2AA', '#F08080', '#ADFF2F', '#CD5C5C', '#8FBC8F',
@@ -167,7 +167,7 @@ def mv_corr_heatmap(df, title="Correlation Heatmap (Numeric Features)"):
             y=corr.columns,
             text=corr.values,
             texttemplate="%{text}",
-            colorscale="Tealrose",
+            colorscale=[[0.0,"#00BFFF"],[0.5,"#FF69B4"],[1.0,"#FF1493"]],
             zmin=-1, 
             zmax=1,
             colorbar=dict(title="Corr")
