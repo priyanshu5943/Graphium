@@ -136,7 +136,7 @@ def ip_cat_univariate(df):
         rotate_labels = -45 if len(value_counts) > 8 else 0
 
         colors = [
-            "#00BFFF", "#FF1493", '#FFD700', '#32CD32', '#9370DB', '#7FFFD4',
+            "#00E5FF",  "#FF007F", '#FFD700', '#32CD32', '#9370DB', '#7FFFD4',
             '#FFA500', '#00FA9A', '#FF4500', '#4682B4', '#DA70D6',
             '#FFB6C1', '#FF1493', '#FF8C00', '#98FB98', '#9370DB',
             '#32CD32', '#00CED1', '#1E90FF', '#FFFF00', '#7CFC00'
@@ -411,7 +411,7 @@ import colorsys
 # ============================================================
 
 _base_colors = [
-    "#00BFFF", "#FF1493", '#FFD700', '#32CD32', '#9370DB', '#7FFFD4', 'red',
+    "#00E5FF",  "#FF007F", '#FFD700', '#32CD32', '#9370DB', '#7FFFD4', 'red',
     '#7CFC00', '#98FB98', '#9370DB', '#32CD32', '#00CED1',
     '#1E90FF', '#FFFF00', '#7CFC00'
 ]
@@ -485,7 +485,8 @@ def ip_cat_vs_target(df, target_col):
 
     # Detect categorical features except target
     cat_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
-    cat_cols = [col for col in cat_cols if col != target_col]
+    cat_cols = [col for col in cat_cols if col != target_col and df[col].nunique() <= 10]
+
 
     if not cat_cols:
         display(HTML("<h3 style='color:red;'>No categorical columns found for plotting.</h3>"))
